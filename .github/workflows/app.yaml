@@ -2,7 +2,7 @@ runtime: python310
 instance_class: F1
 
 env_variables:
-  APPENGINE_URL: https://explago-kawoozy.uc.r.appspot.com
+  APPENGINE_URL: https://explago-kawoozy.et.r.appspot.com
 
 handlers:
 # This configures Google App Engine to serve the files in the app's static

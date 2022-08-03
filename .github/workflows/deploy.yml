@@ -28,7 +28,7 @@ jobs:
         service_account_key: '${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}'
     - name: 'Deploy to App Engine'
       run: |
-        gcloud auth activate-service-account --key-file '${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}'
+        gcloud auth activate-service-account --key '${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}'
         gcloud --quiet --project '${{ secrets.PROJECT_ID_PRODUCTION }}' app deploy
 
     # - name: Install Google Cloud SDK

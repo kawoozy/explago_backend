@@ -27,6 +27,7 @@ jobs:
     - name: 'Deploy to App Engine'
       run: |
         echo ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }} > keyfile.json
+        gcloud version
         gcloud auth activate-service-account --key-file keyfile.json
         gcloud --quiet --project ${{ secrets.PROJECT_ID_PRODUCTION }} app deploy
 

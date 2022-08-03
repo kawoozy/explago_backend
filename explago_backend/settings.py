@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-q_5%#w@hy$=gw=+q131#qm$+dj@tg#m$(04k*7ke$djzl4&fl_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['explago-kawoozy.uc.r.appspot.com']
 
 
 # Application definition

@@ -28,7 +28,7 @@ jobs:
     - name: Deploy
       uses: google-github-actions/deploy-appengine@v0.4.0
       with:
-        deliverables: app.yaml
+        deliverables: .github/workflows/app.yaml
         project_id: $PROJECT_ID_PRODUCTION
         credentials: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
         version: v1

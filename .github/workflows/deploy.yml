@@ -21,28 +21,24 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python manage.py migrate
-    # - name: Setup credentials
-    #   run: echo $DEPLOY_KEY_FILE_PRODUCTION > keyfile.json
-    - name: Install Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v0.4.0
-    - id: 'auth'
-      name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v0
-      with: 
-        credentials_json: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
-    - name: Deploy
-      uses: google-github-actions/deploy-appengine@v0.4.0
+    - name: 'Setup Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v0'
       with:
-        deliverables: .github/workflows/app.yaml
-        project_id: ${secrets.PROJECT_ID_PRODUCTION } 
-        version: v1
-    # - name: Set up environment variable
-    #   run: |
-    #     touch .github.env
-    #     echo "export PROJECT_ID=$PROJECT_ID_PRODUCTION" >> .github.env
-    #     echo "export CONFIGURATION_ENVIRONMENT=production" >> .github.env
-    #     echo $DEPLOY_KEY_FILE_PRODUCTION > keyfile.json
-    # - name: Deploy to Google App Engine
-    #   run: |
-    #     gcloud auth activate-service-account --key-file keyfile.json
-    #     gcloud --quiet --project $PROJECT_ID app deploy
+        project_id: '${{ secrets.PROJECT_ID_PRODUCTION }}'
+        service_account_key: '${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}'
+    - name: 'Deploy to App Engine'
+      run: 'gcloud app deploy app.yaml --quiet --no-promote --version v1'
+    # - name: Install Google Cloud SDK
+    #   uses: google-github-actions/setup-gcloud@v0.4.0
+    # - id: 'auth'
+    #   name: Authenticate to Google Cloud
+    #   uses: google-github-actions/auth@v0
+    #   with: 
+    #     credentials_json: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
+    # - name: Deploy
+    #   uses: google-github-actions/deploy-appengine@v0.4.0
+    #   with:
+    #     deliverables: .github/workflows/app.yaml
+    #     project_id: ${secrets.PROJECT_ID_PRODUCTION } 
+    #     version: v1
+    

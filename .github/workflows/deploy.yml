@@ -23,7 +23,10 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python manage.py migrate
     - name: 'Setup Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v0'
+      run: |
+        echo "deb http://packages.cloud.google.com/apt cloud-sdk-jessie main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+        apt-get update && apt-get install google-cloud-sdk
     - name: 'Deploy to App Engine'
       run: |
         echo ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }} > keyfile.json

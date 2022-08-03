@@ -26,6 +26,7 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v0'
     - name: 'Deploy to App Engine'
       run: |
+        echo $DEPLOY_KEY_FILE_PRODUCTION
         echo $DEPLOY_KEY_FILE_PRODUCTION > keyfile.json
         gcloud auth activate-service-account --key-file keyfile.json
         gcloud --quiet --project $PROJECT_ID_PRODUCTION app deploy

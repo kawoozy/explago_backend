@@ -27,8 +27,8 @@ jobs:
       uses: google-github-actions/deploy-appengine@v0.2.0
       with:
         deliverables: app.yaml
-        project_id: ${{ PROJECT_ID_PRODUCTION }}
-        credentials: ${{ DEPLOY_KEY_FILE_PRODUCTION }}
+        project_id: ${{ secrets.PROJECT_ID_PRODUCTION }}
+        credentials: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
         promote: true
         version: v1
     # - name: Set up environment variable

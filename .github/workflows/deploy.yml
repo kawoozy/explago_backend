@@ -28,7 +28,7 @@ jobs:
       with:
         deliverables: app.yaml
         project_id: $PROJECT_ID_PRODUCTION
-        credentials: $DEPLOY_KEY_FILE_PRODUCTION
+        credentials: ${{ DEPLOY_KEY_FILE_PRODUCTION }}
         promote: true
         version: v1
     # - name: Set up environment variable

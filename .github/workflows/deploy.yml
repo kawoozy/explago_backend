@@ -22,28 +22,32 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python manage.py migrate
-    - name: 'Setup Cloud SDK'
-      run: |
-        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-        sudo apt-get update && sudo apt-get install google-cloud-cli
-    - name: 'Deploy to App Engine'
-      run: |
-        echo ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }} > keyfile.json
-        gcloud version
-        gcloud auth activate-service-account --key-file keyfile.json
-        gcloud --quiet --project ${{ secrets.PROJECT_ID_PRODUCTION }} app deploy
-
-    # - name: Install Google Cloud SDK
-    #   uses: google-github-actions/setup-gcloud@v0.4.0
+    # - name: 'Setup Cloud SDK'
+    #   run: |
+    #     echo "deb http://packages.cloud.google.com/apt cloud-sdk-jessie main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+    #     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    #     sudo apt-get update && sudo apt-get install google-cloud-sdk
+    # - name: 'Deploy to App Engine'
+    #   run: |
+    #     echo ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }} > keyfile.json
+    #     gcloud version
+    #     gcloud auth activate-service-account --key-file keyfile.json
+    #     gcloud --quiet --project ${{ secrets.PROJECT_ID_PRODUCTION }} app deploy
+    - name: Install Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.PROJECT_ID_PRODUCTION }}
+        service_account_key: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
+        export_default_credentials: true
     # - id: 'auth'
     #   name: Authenticate to Google Cloud
     #   uses: google-github-actions/auth@v0
     #   with: 
     #     credentials_json: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
-    # - name: Deploy
-    #   uses: google-github-actions/deploy-appengine@v0.4.0
-    #   with:
-    #     deliverables: .github/workflows/app.yaml
-    #     project_id: ${secrets.PROJECT_ID_PRODUCTION } 
-    #     version: v1
+    - name: Deploy
+      uses: google-github-actions/deploy-appengine@master
+      with:
+        deliverables: .github/workflows/app.yaml
+        project_id: ${{ secrets.PROJECT_ID_PRODUCTION }}
+        credentials: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
+        version: v1

@@ -1,0 +1,38 @@
+name: deploy-backend
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python manage.py migrate
+    - name: Install Google Cloud SDK
+      run: |
+        echo "deb http://packages.cloud.google.com/apt cloud-sdk-jessie main" | tee /etc/apt/sources.list.d/google-cloud-sdk.list
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+        apt-get update && apt-get install google-cloud-sdk
+    - name: Set up environment variable
+      run: |
+        touch .github.env
+        echo "export PROJECT_ID=$PROJECT_ID_PRODUCTION" >> .github.env
+        echo "export CONFIGURATION_ENVIRONMENT=production" >> .github.env
+        echo $DEPLOY_KEY_FILE_PRODUCTION > keyfile.json
+    - name: Deploy to Google App Engine
+      run: |
+        gcloud auth activate-service-account --key-file keyfile.json
+        gcloud --quiet --project $PROJECT_ID app deploy

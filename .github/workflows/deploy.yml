@@ -5,6 +5,7 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: explago
     strategy:
       fail-fast: false
       matrix:
@@ -23,14 +24,11 @@ jobs:
         python manage.py migrate
     - name: 'Setup Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
-      with:
-        project_id: '${{ secrets.PROJECT_ID_PRODUCTION }}'
-        service_account_key: '${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}'
     - name: 'Deploy to App Engine'
       run: |
-        echo ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }} > keyfile.json
+        echo ${{ DEPLOY_KEY_FILE_PRODUCTION }} > keyfile.json
         gcloud auth activate-service-account --key-file keyfile.json
-        gcloud --quiet --project '${{ secrets.PROJECT_ID_PRODUCTION }}' app deploy
+        gcloud --quiet --project '${{ PROJECT_ID_PRODUCTION }}' app deploy
 
     # - name: Install Google Cloud SDK
     #   uses: google-github-actions/setup-gcloud@v0.4.0

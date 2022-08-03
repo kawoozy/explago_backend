@@ -22,9 +22,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python manage.py migrate
     - name: Install Google Cloud SDK
-      run: |
-        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-        apt-get update && apt-get install google-cloud-sdk
+      uses: google-github-actions/setup-gcloud@v0.2.0
     - name: Set up environment variable
       run: |
         touch .github.env

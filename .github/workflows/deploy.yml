@@ -34,7 +34,7 @@ jobs:
     #     gcloud auth activate-service-account --key-file keyfile.json
     #     gcloud --quiet --project ${{ secrets.PROJECT_ID_PRODUCTION }} app deploy
     - name: Install Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@v0.4.0
       with:
         project_id: ${{ secrets.PROJECT_ID_PRODUCTION }}
         service_account_key: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
@@ -45,7 +45,7 @@ jobs:
     #   with: 
     #     credentials_json: ${{ secrets.DEPLOY_KEY_FILE_PRODUCTION }}
     - name: Deploy
-      uses: google-github-actions/deploy-appengine@master
+      uses: google-github-actions/deploy-appengine@v0.4.0
       with:
         deliverables: .github/workflows/app.yaml
         project_id: ${{ secrets.PROJECT_ID_PRODUCTION }}

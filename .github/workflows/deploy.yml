@@ -23,13 +23,21 @@ jobs:
         python manage.py migrate
     - name: Install Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v0.2.0
-    - name: Set up environment variable
-      run: |
-        touch .github.env
-        echo "export PROJECT_ID=$PROJECT_ID_PRODUCTION" >> .github.env
-        echo "export CONFIGURATION_ENVIRONMENT=production" >> .github.env
-        echo $DEPLOY_KEY_FILE_PRODUCTION > keyfile.json
-    - name: Deploy to Google App Engine
-      run: |
-        gcloud auth activate-service-account --key-file keyfile.json
-        gcloud --quiet --project $PROJECT_ID app deploy
+    - name: Deploy
+      uses: google-github-actions/deploy-appengine@v0.2.0
+      with:
+        deliverables: app.yaml
+        project_id: ${{ PROJECT_ID_PRODUCTION }}
+        credentials: ${{ DEPLOY_KEY_FILE_PRODUCTION }}
+        promote: true
+        version: v1
+    # - name: Set up environment variable
+    #   run: |
+    #     touch .github.env
+    #     echo "export PROJECT_ID=$PROJECT_ID_PRODUCTION" >> .github.env
+    #     echo "export CONFIGURATION_ENVIRONMENT=production" >> .github.env
+    #     echo $DEPLOY_KEY_FILE_PRODUCTION > keyfile.json
+    # - name: Deploy to Google App Engine
+    #   run: |
+    #     gcloud auth activate-service-account --key-file keyfile.json
+    #     gcloud --quiet --project $PROJECT_ID app deploy
